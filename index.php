@@ -1,5 +1,5 @@
 <?php
-    include('processor/processor.php')
+    include('Processor/Processor.php')
 ?>
 <!doctype html>
 <html lang="en">

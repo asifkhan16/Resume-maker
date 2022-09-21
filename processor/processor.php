@@ -1,5 +1,5 @@
 <?php 
-
-include('Authentication.php');
+    include('Authentication.php');
+    
     $user = new Authentication(); 
 ?>
