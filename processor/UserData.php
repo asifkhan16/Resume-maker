@@ -1,6 +1,6 @@
 <?php 
     include('Connection.php');
-    class Authentication{
+    class UserData{
         function __construct(){
             $db_conn = new Connection();
             $db_conn = $db_conn->connect();
