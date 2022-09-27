@@ -1,5 +1,18 @@
 <?php
-include('Processor/Processor.php')
+  session_name("resume_maker");
+  session_start();
+
+  if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
+      header("location: dashboard.php");
+  }
+
+  include('Processor/Processor.php');
+  
+  $resp = "";
+  if (isset($_POST['sign-up'])) {
+    $resp = $auth->register();
+  }
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -18,7 +31,7 @@ include('Processor/Processor.php')
   <main class="p-5 pt-4 rounded text-white signup-wrapper">
     <h1 class="mb-" style="letter-spacing: 2px">Register</h1>
     <hr class="mb-5">
-    <form action="#" method="POST" enctype="multipart/form-data">
+    <form action="signup.php" method="POST" enctype="multipart/form-data">
       <div class="d-flex justify-content-between align-items-center d-flex mb-3">
         <div class="w-50">
           <label class="m" for="">Name</label>
@@ -47,7 +60,7 @@ include('Processor/Processor.php')
         <div class="w-50">
           <label class="mb-2" for="">Confirm Password</label>
         </div>
-        <input type="password" class="form-control" name="confirm_password" placeholder="confirm password">
+        <input type="password" class="form-control" name="c_password" placeholder="confirm password">
       </div>
       <div class=" d-flex justify-content-between align-items-center d-flex mb-3">
         <div class="w-50">
@@ -58,8 +71,8 @@ include('Processor/Processor.php')
       <div class="text-end">
         <a href="login.php" class="signup-link">Already have an Account</a>
       </div>
-      <span class="">the response message</span>
-      <button type="submit" class="login-btn">Sign Up</button>
+      <span class="text-danger"><?php echo $resp ?></span>
+      <button type="submit" class="login-btn" name="sign-up">Sign Up</button>
     </form>
   </main>
 

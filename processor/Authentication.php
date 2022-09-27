@@ -9,10 +9,30 @@ class Authentication
 		$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 
+	function test(){
+		try {
+			$email = $_POST['email'];
+			$query = "SELECT * FROM users WHERE email=? LIMIT 1";
+			$stmt = $this->db->prepare($query);
+			$stmt->execute(array($email));
+			$user =  $stmt->fetch(PDO::FETCH_ASSOC);
+
+			echo "<pre>". var_export($user,true). "</pre>";
+			echo $user['name'];
+			// foreach ($user as $key => $value) {
+			// 	$id =  $value['id'];
+			// 	$name = $value['name'];
+			// 	$image = $value['image'];
+			// }
+		} catch (\Throwable $th) {
+			return $th->getMessage();
+		}
+	}
+
 	function register()
 	{
 		try {
-
+			// return 'working';
 			$name = $_POST['name'];
 			$contact = $_POST['contact'];
 			$email = $_POST['email'];
@@ -21,7 +41,7 @@ class Authentication
 
 			$filename = $_FILES["image"]["name"];
 			$tempname = $_FILES["image"]["tmp_name"];
-			$folder = "../assets/images/" . $filename;
+			$folder = "assets/images/profile" . $filename;
 
 			// VALIDATION
 			if (!preg_match("/^[a-zA-Z-'\s]+$/", $name)) {
@@ -29,15 +49,20 @@ class Authentication
 			}
 
 			if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				return "You have entered an invalid email";
+				return "Please Enter a valid Email";
 			}
 
 			if (!preg_match("/^[0-9]{11}+$/", $contact)) {
 				return "Please enter a valid contact number e.g. 0313XXXXXXX";
 			}
 
+			if($password == "")
+				return "Please Enter a valid password.";
+
 			if ($password != $c_password)
 				return "password confirmation does not match.";
+
+			
 
 			$password = md5($_POST['password']);
 
@@ -51,27 +76,22 @@ class Authentication
 
 			$query = "INSERT INTO  users(name,email,contact ,password,image) VALUES(?,?,?,?,?)";
 			$stmt = $this->db->prepare($query);
-			$stmt->execute(array($name, $contact, $email, $filename, $password));
+			$stmt->execute(array($name,$email,$contact,$password,$filename));
 
-			$query = "SELECT * FROM users WHERE EmailId=? LIMIT 1";
+			$query = "SELECT * FROM users WHERE email=? LIMIT 1";
 			$stmt = $this->db->prepare($query);
 			$stmt->execute(array($email));
-			$user =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+			$user =  $stmt->fetch(PDO::FETCH_ASSOC);
 
-			foreach ($user as $key => $value) {
-				$id =  $value['id'];
-				$name = $value['FullName'];
-				$image = $value['image'];
-			}
+			$_SESSION['id'] = $user['id'];
+			$_SESSION['user_name'] = $user['name'];
+			$_SESSION['user_image'] = $user['image'];
+			$_SESSION['user_logged_in'] = true;
+
 			session_name("resume_maker");
 			session_start();
 
-			$_SESSION['id'] = $id;
-			$_SESSION['image'] = $image;
-			$_SESSION['user_name'] = $name;
-			$_SESSION['user_logged_in'] = true;
-
-			header('location:../index.php');
+			header('location:dashboard.php');
 		} catch (\Throwable $th) {
 			return $th->getMessage();
 		}
@@ -90,30 +110,24 @@ class Authentication
 				return "You have entered an invalid email";
 			}
 
-			$query = "SELECT * FROM users WHERE EmailId=? AND Password=?";
+			$query = "SELECT * FROM users WHERE email=? AND Password=?";
 			$stmt = $this->db->prepare($query);
 			$stmt->execute(array($email, $password));
 
 			if ($stmt->rowCount() != 1) {
 				return "Invalid Credentials";
 			}
-			$user = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			$user =  $stmt->fetch(PDO::FETCH_ASSOC);
 
-			foreach ($user as $key => $value) {
-				$id =  $value['id'];
-				$name = $value['FullName'];
-				$image = $value['image'];
-			}
-
-			session_name("travel");
-			session_start();
-
-			$_SESSION['id'] = $id;
-			$_SESSION['image'] = $image;
-			$_SESSION['user_name'] = $name;
+			$_SESSION['id'] = $user['id'];
+			$_SESSION['user_name'] = $user['name'];
+			$_SESSION['user_image'] = $user['image'];
 			$_SESSION['user_logged_in'] = true;
 
-			header('location:../index.php');
+			session_name("resume_maker");
+			session_start();
+
+			header('location:dashboard.php');
 		} catch (\Throwable $th) {
 			return $th->getMessage();
 		}

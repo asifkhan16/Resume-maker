@@ -1,4 +1,10 @@
 <?php
+session_name("resume_maker");
+session_start();
+
+if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
+    header("location: dashboard.php");
+}
 include('Processor/Processor.php')
 ?>
 <!doctype html>

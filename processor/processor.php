@@ -3,6 +3,6 @@ include('Connection.php');
     include('Authentication.php');
     include('UserData.php');
 
-    $user = new Authentication(); 
+    $auth = new Authentication(); 
     $user_data = new UserData();
 ?>
