@@ -1,5 +1,16 @@
 <?php
-include('Processor/Processor.php')
+session_name("resume_maker");
+session_start();
+
+if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
+    header("location: dashboard.php");
+}
+include('Processor/Processor.php');
+
+$resp = "";
+if(isset($_POST['login'])){
+  $resp = $auth->login();
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -25,13 +36,13 @@ include('Processor/Processor.php')
         </div>
         <div class="form-group mb-3">
           <label class="mb-2" for="">Password</label>
-          <input type="password" class="form-control" name="email" placeholder="Enter your User Name">
+          <input type="password" class="form-control" name="password" placeholder="Enter your User Name">
         </div>
         <div class="text-end">
           <a href="signup.php" class="signup-link">Dont have an Account</a>
         </div>
-        <span class="">the response message</span>
-        <button type="submit" class="login-btn">Login</button>
+        <span class=""><?php echo $resp?></span>
+        <button type="submit" class="login-btn" name="login">Login</button>
       </form>
   </main>
 
