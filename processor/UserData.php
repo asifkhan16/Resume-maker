@@ -1,5 +1,5 @@
 <?php 
-    include('Connection.php');
+    // include('connection.php');
     class UserData{
         function __construct(){
             $obj = new Connection();
@@ -144,6 +144,3 @@
             }
         }
     }
-
-    
-?>

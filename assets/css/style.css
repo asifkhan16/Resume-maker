@@ -1,0 +1,53 @@
+:root{
+    --primary-color :#1E4A47;
+}
+
+/* Index page start */
+
+.navbar-brand{
+    color: var(--primary-color)!important;
+    font-weight: bold!important;
+}
+.login-btn{
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+.login-btn:hover{
+    background-color: var(--primary-color)!important;
+    color: #fff!important;
+}
+.header-btn{
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.header-btn:hover{
+    background-color: #fff;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+.how-it-works span{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0px 0px 5px 0px var(--primary-color);
+    margin-right: 20px;
+}
+.cards img{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+.footer{
+    border-top: 1px solid var(--primary-color)!important;
+}
+
+
+/* index page end */
