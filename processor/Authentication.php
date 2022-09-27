@@ -1,17 +1,18 @@
-<?php 
-    include('Connection.php');
-    class Authentication{
-        function __construct(){
-            $obj = new Connection();
-            $this->db = $obj->connect();
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        }
-    }
+<?php
+// include('connection.php');
+class Authentication
+{
+	function __construct()
+	{
+		$obj = new Connection();
+		$this->db = $obj->connect();
+		$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	}
 
-    function register()
+	function register()
 	{
 		try {
-			
+
 			$name = $_POST['name'];
 			$contact = $_POST['contact'];
 			$email = $_POST['email'];
@@ -117,4 +118,4 @@
 			return $th->getMessage();
 		}
 	}
-?>
+}

@@ -1,10 +1,11 @@
 <?php
     class Connection{
+        
         function connect()
         {
             $servername = "localhost";
-	        $username = "asif";
-	        $password = "12345678";
+	        $username = "ZEHRI";
+	        $password = "ijaz1234";
 	        try{
 	        	$db_conn = new PDO("mysql:host=$servername;dbname=resume_maker", $username, $password);
                 return $db_conn;
@@ -13,5 +14,3 @@
 	        }
         }
     }
-    
-?>

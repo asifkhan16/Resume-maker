@@ -1,4 +1,5 @@
 <?php 
+include('Connection.php');
     include('Authentication.php');
     include('UserData.php');
 
