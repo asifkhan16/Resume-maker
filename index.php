@@ -15,21 +15,21 @@ include('processor/processor.php');
 <body>
   <!-- NAVBAR -->
   <div class="navbar-wrapper">
-  <nav class="navbar px-5 py-4 navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Resume Maker</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <nav class="navbar px-5 py-4 navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Resume Maker</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
 
-        </ul>
-        <a href="login.php" class="btn  login-btn">Login</a>
+          </ul>
+          <a href="login.php" class="btn  login-btn">Login</a>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
   </div>
   <!-- NAVBAR END -->
 
@@ -51,23 +51,23 @@ include('processor/processor.php');
   <!-- HEADER END -->
 
   <!-- Content -->
-<div class="container-fluid my-5 py-5 bg-light how-it-works">
-  <h1 class="text-center mb-5" style="font-size: 4rem">How it Works</h1>
-  <div class="row px-5">
-    <div class="col-md-4 text-center d-flex justify-content-center">
-      <span>2</span>
-      <h4>choose a template that <br> embodies  your style.</h4>
-    </div>
-    <div class="col-md-4 d-flex justify-content-center">
-      <span>2</span>
-      <h4>Start by filling in your <br> resume Detail.</h4>
-    </div>
-    <div class="col-md-4 d-flex justify-content-center">
-      <span>3</span>
-      <h4>Download your <br> Resume instantly.</h4>
+  <div class="container-fluid my-5 py-5 bg-light how-it-works">
+    <h1 class="text-center mb-5" style="font-size: 4rem">How it Works</h1>
+    <div class="row px-5">
+      <div class="col-md-4 d-flex justify-content-center">
+        <span>2</span>
+        <h4>choose a template that<br>embodies your style.</h4>
+      </div>
+      <div class="col-md-4 d-flex justify-content-center">
+        <span>2</span>
+        <h4>Start by filling in your <br> resume Detail.</h4>
+      </div>
+      <div class="col-md-4 d-flex justify-content-center">
+        <span>3</span>
+        <h4>Download your <br> Resume instantly.</h4>
+      </div>
     </div>
   </div>
-</div>
 
   <div class="container cards my-5">
     <div class="row p-5">
@@ -91,7 +91,7 @@ include('processor/processor.php');
       </div>
       <div class="col-md-4">
         <div class="card" style="width: 18rem; border:none">
-          <img src="assets/images/resume-icon-png-2.png"  class="card-img-top  mx-auto" alt="...">
+          <img src="assets/images/resume-icon-png-2.png" class="card-img-top  mx-auto" alt="...">
           <div class="card-body text-center">
             <h5 class="card-title">Customize and Download</h5>
             <p class="card-text">Make it truly yours. Uniqueness in a few clicks.</p>
