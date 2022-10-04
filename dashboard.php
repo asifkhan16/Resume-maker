@@ -1,5 +1,6 @@
 <?php
 
+
 session_name('resume_maker');
 session_start();
 error_reporting(0);
@@ -7,6 +8,17 @@ if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
 } else
   header("location:login.php");
 include('Processor/Processor.php')
+
+    session_name('resume_maker');
+    session_start();
+    error_reporting(0);
+    if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
+    } else
+        header("location:login.php");
+    include('Processor/Processor.php');
+
+    $user->getData();
+
 ?>
 <!doctype html>
 <html lang="en">
