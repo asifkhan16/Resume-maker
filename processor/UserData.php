@@ -7,6 +7,22 @@
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
 
+        function getData(){
+            try {
+             
+            $id = $_SESSION['id'];
+
+            $query = "SELECT users.* ,(SELECT * FROM educations WHERE user_id = $id) FROM users WHERE id=?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(array($id));
+
+            $data = $stmt->fetchObject(PDO::FETCH_OBJ);
+            echo "<pre>" . var_export($data,true) . "</pre>";
+            } catch (\Throwable $th) {
+                echo "<pre>" . var_export($th->getMessage(),true) . "</pre>";
+            }
+        }
+
         function storeData(){
 
             try {
@@ -143,4 +159,6 @@
                 return $th->getMessage();
             }
         }
+
+        
     }
