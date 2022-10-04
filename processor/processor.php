@@ -4,5 +4,5 @@ include('Connection.php');
     include('UserData.php');
 
     $auth = new Authentication(); 
-    $user_data = new UserData();
+    $user = new UserData();
 ?>
