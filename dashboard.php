@@ -1,14 +1,4 @@
 <?php
-
-
-session_name('resume_maker');
-session_start();
-error_reporting(0);
-if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
-} else
-  header("location:login.php");
-include('Processor/Processor.php')
-
     session_name('resume_maker');
     session_start();
     error_reporting(0);
@@ -17,7 +7,7 @@ include('Processor/Processor.php')
         header("location:login.php");
     include('Processor/Processor.php');
 
-    $user->getData();
+    // $user->getData();
 
 ?>
 <!doctype html>
@@ -45,7 +35,11 @@ include('Processor/Processor.php')
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           </ul>
           <a href="info.php" class="btn  btn-primary me-4">Add Information</a>
-          <a href="login.php" class="btn  login-btn">Login</a>
+          <?php if(!isset($_SESSION['id'])){ ?>
+            <a href="login.php" class="btn  login-btn">Login</a>
+            <?php } else{ ?>
+              <a href="logout.php" class="btn  login-btn">Logout</a>
+          <?php }?>
         </div>
       </div>
     </nav>
