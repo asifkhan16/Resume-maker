@@ -4,8 +4,8 @@
         function connect()
         {
             $servername = "localhost";
-	        $username = "ZEHRI";
-	        $password = "ijaz1234";
+	        $username = "asif";
+	        $password = "12345678";
 	        try{
 	        	$db_conn = new PDO("mysql:host=$servername;dbname=resume_maker", $username, $password);
                 return $db_conn;

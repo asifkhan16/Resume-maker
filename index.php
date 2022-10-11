@@ -26,7 +26,11 @@ include('processor/processor.php');
 
 
           </ul>
-          <a href="login.php" class="btn  login-btn">Login</a>
+          <?php if(!isset($_SESSION['id'])){ ?>
+            <a href="login.php" class="btn  login-btn">Login</a>
+            <?php } else{ ?>
+              <a href="logout.php" class="btn  login-btn">Logout</a>
+          <?php }?>
         </div>
       </div>
     </nav>
