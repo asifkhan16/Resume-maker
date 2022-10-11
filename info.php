@@ -6,7 +6,10 @@ error_reporting(0);
 if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
 } else
     header("location:login.php");
-include('Processor/Processor.php')
+include('Processor/Processor.php');
+if(isset($_POST['submit'])){
+    $user->storeData();
+  }
 ?>
 <!doctype html>
 <html lang="en">
@@ -42,7 +45,11 @@ include('Processor/Processor.php')
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     </ul>
                     <a href="dashboard.php" class="btn  btn-primary me-4">back</a>
-                    <a href="login.php" class="btn  login-btn">Login</a>
+                    <?php if(!isset($_SESSION['id'])){ ?>
+            <a href="login.php" class="btn  login-btn">Login</a>
+            <?php } else{ ?>
+              <a href="logout.php" class="btn  login-btn">Logout</a>
+          <?php }?>
                 </div>
             </div>
         </nav>
@@ -53,7 +60,7 @@ include('Processor/Processor.php')
         <div class="container form-wrapper">
             <h2 class="px-3 pt-3">Enter your inforamation</h2>
             <hr>
-            <form action="#" method="POST" class="pb-1" enctype="multipart/form-data">
+            <form action="info.php" method="POST" class="pb-1" enctype="multipart/form-data">
                 <div class="row px-4 pb-3">
                     <div class="col-md-6 mb-4 px-lg-5">
                         <div class="form-group">
@@ -179,7 +186,7 @@ include('Processor/Processor.php')
                       
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary d-block w-100 mb-5">Save Information</button>
+                <input type="submit" name="submit" class="btn btn-primary d-block w-100 mb-5" value="Save Information">
             </form>
         </div>
     </main>

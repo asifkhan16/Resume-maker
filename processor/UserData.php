@@ -9,6 +9,8 @@
 
         function getData(){
             try {
+
+                // return "<pre>" . var_export('working'). "</pre>";
              
             $id = $_SESSION['id'];
 
