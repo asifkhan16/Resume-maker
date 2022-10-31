@@ -12,19 +12,44 @@ class UserData
     function getData()
     {
         try {
-
             // return "<pre>" . var_export('working'). "</pre>";
-
             $id = $_SESSION['id'];
 
-            $query = "SELECT users.* ,(SELECT * FROM educations WHERE user_id = $id) FROM users WHERE id=?";
+            $query = "SELECT * FROM users WHERE id=?";
             $stmt = $this->db->prepare($query);
             $stmt->execute(array($id));
+            $data['users'] = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-            $data = $stmt->fetchObject(PDO::FETCH_OBJ);
-            echo "<pre>" . var_export($data, true) . "</pre>";
+            $query = "SELECT * FROM educations WHERE user_id=?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(array($id));
+            $data['educations'] = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            $query = "SELECT * FROM experience WHERE user_id=?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(array($id));
+            $data['experiences'] = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            $query = "SELECT * FROM languages WHERE user_id=?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(array($id));
+            $data['languages'] = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            $query = "SELECT * FROM basic_informations WHERE user_id=?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(array($id));
+            $data['basic_info'] = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            $query = "SELECT * FROM skills WHERE user_id=?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(array($id));
+            $data['skills'] = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+
+
+            return $data;
         } catch (\Throwable $th) {
-            echo "<pre>" . var_export($th->getMessage(), true) . "</pre>";
+            return "<pre>" . var_export($th->getMessage(), true) . "</pre>";
         }
     }
 
@@ -41,7 +66,6 @@ class UserData
 
             // EDUCATION
             $institute = $_POST['institute'];
-
             $degree = $_POST['degree'];
             $edu_session = $_POST['edu_session'];
 
@@ -68,31 +92,31 @@ class UserData
             for ($i = 0; $i < count($institute); $i++) {
                 $query = "INSERT INTO educations (user_id,institue,degree,session) VALUE (?,?,?,?)";
                 $stmt = $this->db->prepare($query);
-                $stmt->execute(array($user_id,$institute[$i],$degree[$i],$edu_session[$i]));
+                $stmt->execute(array($user_id, $institute[$i], $degree[$i], $edu_session[$i]));
             }
 
             // STORE  EXPERIENCE
             for ($i = 0; $i < count($company_name); $i++) {
                 $query = "INSERT INTO experience (user_id,job_title,company_name,session,description) VALUE (?,?,?,?,?)";
                 $stmt = $this->db->prepare($query);
-                $stmt->execute(array($user_id,$job_title[$i],$company_name[$i],$exp_session[$i],$description[$i]));
+                $stmt->execute(array($user_id, $job_title[$i], $company_name[$i], $exp_session[$i], $description[$i]));
             }
 
             // STORE  SKILLS
             for ($i = 0; $i < count($skills); $i++) {
                 $query = "INSERT INTO skills (user_id,name) VALUE (?,?)";
                 $stmt = $this->db->prepare($query);
-                $stmt->execute(array($user_id,$skills[$i]));
+                $stmt->execute(array($user_id, $skills[$i]));
             }
 
             // STORE  LANGUGES
             for ($i = 0; $i < count($languages); $i++) {
                 $query = "INSERT INTO languages (user_id,name) VALUE (?,?)";
                 $stmt = $this->db->prepare($query);
-                $stmt->execute(array($user_id,$languages[$i]));
+                $stmt->execute(array($user_id, $languages[$i]));
             }
 
-            return 'Added successfully.';
+            return 'success';
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
@@ -109,58 +133,78 @@ class UserData
             $summary = $_POST['summary'];
             $title = $_POST['title'];
 
-            // EDUCATION
-            $institue = $_POST['institue'];
-            $degree = $_POST['degree'];
-            $edu_session = $_POST['edu_session'];
+           // EDUCATION
+           $institute = $_POST['institute'];
+           $degree = $_POST['degree'];
+           $edu_session = $_POST['edu_session'];
 
             // SKILLS
             $skills = $_POST['skills'];
 
             // LANGUAGE
-            $languages = $_POST['language'];
+            $languages = $_POST['languages'];
 
             // EXPERIENCE
             $job_title = $_POST['job_title'];
             $company_name = $_POST['company_name'];
             $exp_session = $_POST['exp_session'];
-            $description = $_POST['description'];
+            $description = $_POST['exp_description'];
 
 
-            // STORE BASIC INFO 
-            $query = "INSERT INTO basic_informations (user_id,summary,title) VALUES (?,?,?)";
+            // UPDATE BASIC INFO 
+            $query = "UPDATE basic_informations set summary=?,title=? WHERE user_id=?";
             $stmt = $this->db->prepare($query);
-            $stmt->execute(array($user_id, $summary, $job_title));
+            $stmt->execute(array($summary, $title, $user_id));
 
-            // STORE EDUCATION
-            for ($i = 0; $i < count($institue); $i++) {
+            // DELETE EDUCATION
+            $query = "DELETE FROM educations WHERE user_id=?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(array($user_id));
+
+            // DELETE  EXPERIENCE
+            $query = "DELETE FROM experience WHERE user_id=?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(array($user_id));
+
+            // DELETE  SKILLS
+            $query = "DELETE FROM skills WHERE user_id=?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(array($user_id));
+
+            // DELETE  LANGUGES
+            $query = "DELETE FROM languages WHERE user_id=?";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute(array($user_id));
+
+            // UPDATE EDUCATION
+            for ($i = 0; $i < count($institute); $i++) {
                 $query = "INSERT INTO educations (user_id,institue,degree,session) VALUE (?,?,?,?)";
                 $stmt = $this->db->prepare($query);
-                $stmt->execute(array($user_id,));
+                $stmt->execute(array($user_id, $institute[$i], $degree[$i], $edu_session[$i]));
             }
 
-            // STORE  EXPERIENCE
+            // UPDATE  EXPERIENCE
             for ($i = 0; $i < count($company_name); $i++) {
                 $query = "INSERT INTO experience (user_id,job_title,company_name,session,description) VALUE (?,?,?,?,?)";
                 $stmt = $this->db->prepare($query);
-                $stmt->execute(array($user_id,));
+                $stmt->execute(array($user_id, $job_title[$i], $company_name[$i], $exp_session[$i], $description[$i]));
             }
 
-            // STORE  SKILLS
+            // UPDATE  SKILLS
             for ($i = 0; $i < count($skills); $i++) {
                 $query = "INSERT INTO skills (user_id,name) VALUE (?,?)";
                 $stmt = $this->db->prepare($query);
-                $stmt->execute(array($user_id,));
+                $stmt->execute(array($user_id, $skills[$i]));
             }
 
-            // STORE  LANGUGES
+            // UPDATE  LANGUGES
             for ($i = 0; $i < count($languages); $i++) {
-                $query = "INSERT INTO skills (user_id,name) VALUE (?,?)";
+                $query = "INSERT INTO languages (user_id,name) VALUE (?,?)";
                 $stmt = $this->db->prepare($query);
-                $stmt->execute(array($user_id,));
+                $stmt->execute(array($user_id, $languages[$i]));
             }
 
-            return 'Added successfully.';
+            return 'success';
         } catch (\Throwable $th) {
             return $th->getMessage();
         }

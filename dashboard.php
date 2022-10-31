@@ -1,14 +1,16 @@
 <?php
-    session_name('resume_maker');
-    session_start();
-    error_reporting(0);
-    if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
-    } else
-        header("location:login.php");
-    include('Processor/Processor.php');
+session_name('resume_maker');
+session_start();
+error_reporting(0);
+if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
+} else
+  header("location:login.php");
+include('Processor/Processor.php');
 
-    // $user->getData();
-    
+$data = $user->getData();
+
+
+
 
 ?>
 <!doctype html>
@@ -35,12 +37,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           </ul>
+
+          <?php
+          if (empty($data['basic_info'][0])) {
+          ?>
           <a href="info.php" class="btn  btn-primary me-4">Add Information</a>
-          <?php if(!isset($_SESSION['id'])){ ?>
+          <?php } else{ ?>
+            
+            <a href="updateInfo.php" class="btn  btn-primary me-4">Update Information</a>
+          <?php } if (!isset($_SESSION['id'])) { ?>
             <a href="login.php" class="btn  login-btn">Login</a>
-            <?php } else{ ?>
-              <a href="logout.php" class="btn  login-btn">Logout</a>
-          <?php }?>
+            <?php } else { ?>
+            <a href="logout.php" class="btn  login-btn">Logout</a>
+          <?php } ?>
         </div>
       </div>
     </nav>
@@ -51,11 +60,11 @@
   <!-- TEMPLATES -->
   <div class="container  p-5 template-wrapper my-5">
     <a href="template1/index.php">
-    <div class="row">
-      <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-6">
           <img src="assets/images/resume1.PNG" style="width: 80%;" alt="">
         </div>
-      <div class="col-md-6 text-center">
+        <div class="col-md-6 text-center">
           <img src="assets/images/resumeX1.PNG" style="width: 50%;" alt="">
         </div>
       </div>
