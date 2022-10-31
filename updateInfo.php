@@ -7,12 +7,13 @@ if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
 } else
     header("location:login.php");
 include('Processor/Processor.php');
-if (isset($_POST['submit'])) {
-    $response = $user->storeData();
-    // echo "<pre>". var_export($response,true)."</pre>";
-    if($response == 'success')
-        header("location:dashboard.php");
+$data = $user->getData();
 
+if (isset($_POST['submit'])) {
+    $response = $user->updateData();
+    // echo "<pre>". var_export($response,true)."</pre>";
+    if ($response == 'success')
+        header("location:dashboard.php");
 }
 ?>
 <!doctype html>
@@ -64,18 +65,18 @@ if (isset($_POST['submit'])) {
         <div class="container form-wrapper">
             <h2 class="px-3 pt-3">Enter your inforamation</h2>
             <hr>
-            <form action="info.php" method="POST" class="pb-1" enctype="multipart/form-data">
+            <form action="updateInfo.php" method="POST" class="pb-1" enctype="multipart/form-data">
                 <div class="row px-4 pb-3">
                     <div class="col-md-6 mb-4 px-lg-5">
                         <div class="form-group">
                             <label class="mb-1" for="">Title</label>
-                            <input type="text" class="form-control" name="title" placeholder="eg Web Developer">
+                            <input required type="text" class="form-control" name="title" placeholder="eg Web Developer" value="<?php echo $data['basic_info'][0]->title ?>">
                         </div>
                     </div>
                     <div class="col-md-6 mb-4 px-lg-5">
                         <div class="form-group">
                             <label class="mb-1" for="">Summary</label>
-                            <textarea name="summary" id="" class="form-control" placeholder="Summary" rows="2"></textarea>
+                            <textarea name="summary" id="" class="form-control" placeholder="Summary" rows="2"><?php echo $data['basic_info'][0]->summary ?></textarea>
                         </div>
                     </div>
                     <!-- Skills and Languages  -->
@@ -88,7 +89,12 @@ if (isset($_POST['submit'])) {
                                 <span id="add_skill" class="btn btn-sm btn-success"> Add Skill</span>
                             </div>
                             <div id="skills_wrapper">
-                                <input type="text" class="form-control w-75 mb-3" name="skills[]" placeholder="eg Coding">
+                                <?php
+                                foreach ($data['skills'] as $key => $value) { ?>
+                                    <input required type="text" class="form-control w-75 mb-3" name="skills[<?php echo $key ?>]" value="<?php echo $value->name ?>" placeholder="eg Coding">
+                                <?php
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -99,7 +105,12 @@ if (isset($_POST['submit'])) {
                                 <span id="add_language" class="btn btn-sm btn-success"> Add Language</span>
                             </div>
                             <div id="language_wrapper">
-                                <input type="text" class="form-control w-75 mb-3" name="languages[]" placeholder="eg English">
+                                <?php
+                                foreach ($data['languages'] as $key => $value) { ?>
+                                    <input required type="text" class="form-control w-75 mb-3" value="<?php echo $value->name ?>" name="languages[<?php echo $key ?>]" placeholder="eg English">
+                                <?php
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -110,30 +121,37 @@ if (isset($_POST['submit'])) {
                         <span id="add_experience" class="btn btn-sm btn-info">Add Experience</span>
                     </div>
                     <div id="experience_wrapper" class="row">
-                        <div class="col-md-6 mb-4 px-lg-5">
-                            <div class="form-group">
-                                <label class="mb-1" for="">Title</label>
-                                <input type="text" class="form-control" name="job_title[]" placeholder="title">
+                        <?php
+
+                        foreach ($data['experiences'] as $key => $value) { ?>
+
+                            <div class="col-md-6 mb-4 px-lg-5">
+                                <div class="form-group">
+                                    <label class="mb-1" for="">Title</label>
+                                    <input required type="text" value="<?php echo $value->job_title ?>" class="form-control" name="job_title[<?php echo $key ?>]" placeholder="title">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-4 px-lg-5">
-                            <div class="form-group">
-                                <label class="mb-1" for="">Company name</label>
-                                <input type="text" class="form-control" name="company_name[]" placeholder="Company name">
+                            <div class="col-md-6 mb-4 px-lg-5">
+                                <div class="form-group">
+                                    <label class="mb-1" for="">Company name</label>
+                                    <input required type="text" value=" <?php echo $value->company_name ?>" class="form-control" name="company_name[<?php echo $key ?>]" placeholder="Company name">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-4 px-lg-5">
-                            <div class="form-group">
-                                <label class="mb-1" for="">Session</label>
-                                <input type="text" class="form-control" name="exp_session[]" placeholder="2018 - 2022">
+                            <div class="col-md-6 mb-4 px-lg-5">
+                                <div class="form-group">
+                                    <label class="mb-1" for="">Session</label>
+                                    <input required type="text" value="<?php echo $value->session ?>" class="form-control" name="exp_session[<?php echo $key ?>]" placeholder="2018 - 2022">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-4 px-lg-5">
-                            <div class="form-group">
-                                <label class="mb-1" for="">Description</label>
-                                <textarea name="exp_description[]" class="form-control"></textarea>
+                            <div class="col-md-6 mb-4 px-lg-5">
+                                <div class="form-group">
+                                    <label class="mb-1" for="">Description</label>
+                                    <textarea name="exp_description[<?php echo $key ?>]" class="form-control"><?php echo $value->description ?></textarea>
+                                </div>
                             </div>
-                        </div>
+                        <?php
+                        }
+                        ?>
                     </div>
                     <!-- Education -->
                     <hr>
@@ -142,32 +160,38 @@ if (isset($_POST['submit'])) {
                         <span id="add_eduction" class="btn btn-sm btn-info">Add Education</span>
                     </div>
                     <div id="education_wrapper" class="row">
-                        <div class="col-md-6 mb-4 px-lg-5">
-                            <div class="form-group">
-                                <label class="mb-1" for="">Institute</label>
-                                <input type="text" class="form-control" name="institute[]" placeholder="Agriculture University">
+                        <?php
+                        foreach ($data['educations'] as $key => $value) { ?>
+
+                            <div class="col-md-6 mb-4 px-lg-5">
+                                <div class="form-group">
+                                    <label class="mb-1" for="">Institute</label>
+                                    <input required type="text" value=" <?php echo $value->institue ?>" class="form-control" name="institute[<?php echo $key ?>]" placeholder="Agriculture University">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-4 px-lg-5">
-                            <div class="form-group">
-                                <label class="mb-1" for="">Degree</label>
-                                <input type="text" class="form-control" name="degree[]" placeholder="Computer Science">
+                            <div class="col-md-6 mb-4 px-lg-5">
+                                <div class="form-group">
+                                    <label class="mb-1" for="">Degree</label>
+                                    <input required type="text" value="<?php echo $value->degree ?>" class="form-control" name="degree[<?php echo $key ?>]" placeholder="Computer Science">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-4 px-lg-5">
-                            <div class="form-group">
-                                <label class="mb-1" for="">Session</label>
-                                <input type="text" class="form-control" name="edu_session[]"  placeholder="2018 - 2022">
+                            <div class="col-md-6 mb-4 px-lg-5">
+                                <div class="form-group">
+                                    <label class="mb-1" for="">Session</label>
+                                    <input required type="text" value="<?php echo $value->session ?>" class="form-control" name="edu_session[<?php echo $key ?>]" placeholder="2018 - 2022">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 mb-4 px-lg-5">
-                        </div>
+                            <div class="col-md-6 mb-4 px-lg-5">
+                            </div>
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
                 <p class="text-danger text-center"><strong><?php echo $response ?></strong></p>
-                <input type="submit" name="submit" class="btn btn-primary d-block w-100 mb-5" value="Save Information">
+                <input type="submit" name="submit" class="btn btn-primary d-block w-100 mb-5" value="Update Information">
             </form>
-            
+
         </div>
     </main>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -177,14 +201,14 @@ if (isset($_POST['submit'])) {
         $(document).ready(function() {
             $(this).on('click', '#add_skill', function() {
                 $('#skills_wrapper').append('\
-                <input type="text" class="form-control w-75 mb-3" name="skills[]" placeholder="eg Coding">\
+                <input required type="text" class="form-control w-75 mb-3" name="skills[]" placeholder="eg Coding">\
                 ')
             })
 
 
             $(this).on('click', '#add_language', function() {
                 $('#language_wrapper').append('\
-                <input type="text" class="form-control w-75 mb-3" name="languages[]" placeholder="eg English">\
+                <input required type="text" class="form-control w-75 mb-3" name="languages[]" placeholder="eg English">\
                 ')
             })
 
@@ -193,19 +217,19 @@ if (isset($_POST['submit'])) {
                          <div class="col-md-6 mb-4 px-lg-5">\
                             <div class="form-group">\
                                 <label class="mb-1" for="">Title</label>\
-                                <input type="text" class="form-control" name="job_title[]" placeholder="title">\
+                                <input required type="text" class="form-control" name="job_title[]" placeholder="title">\
                             </div>\
                         </div>\
                         <div class="col-md-6 mb-4 px-lg-5">\
                             <div class="form-group">\
                                 <label class="mb-1" for="">Company name</label>\
-                                <input type="text" class="form-control" name="company_name[]" placeholder="Company name">\
+                                <input required type="text" class="form-control" name="company_name[]" placeholder="Company name">\
                             </div>\
                         </div>\
                         <div class="col-md-6 mb-4 px-lg-5">\
                             <div class="form-group">\
                                 <label class="mb-1" for="">Session</label>\
-                                <input type="text" class="form-control" name="exp_session[]" placeholder="2018 - 2022">\
+                                <input required type="text" class="form-control" name="exp_session[]" placeholder="2018 - 2022">\
                             </div>\
                         </div>\
                         <div class="col-md-6 mb-4 px-lg-5">\
@@ -222,19 +246,19 @@ if (isset($_POST['submit'])) {
                 <div class="col-md-6 mb-4 px-lg-5">\
                             <div class="form-group">\
                                 <label class="mb-1" for="">Institute</label>\
-                                <input type="text" class="form-control" name="institute[]" placeholder="Agriculture University">\
+                                <input required type="text" class="form-control" name="institute[]" placeholder="Agriculture University">\
                             </div>\
                         </div>\
                         <div class="col-md-6 mb-4 px-lg-5">\
                             <div class="form-group">\
                                 <label class="mb-1" for="">Degree</label>\
-                                <input type="text" class="form-control" name="degree[]" placeholder="Computer Science">\
+                                <input required type="text" class="form-control" name="degree[]" placeholder="Computer Science">\
                             </div>\
                         </div>\
                         <div class="col-md-6 mb-4 px-lg-5">\
                             <div class="form-group">\
                                 <label class="mb-1" for="">Session</label>\
-                                <input type="text" class="form-control" name="edu_session[]"  placeholder="2018 - 2022">\
+                                <input required type="text" class="form-control" name="edu_session[]"  placeholder="2018 - 2022">\
                             </div>\
                         </div>\
                         <div class="col-md-6 mb-4 px-lg-5">\

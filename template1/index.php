@@ -1,3 +1,19 @@
+<?php
+session_name('resume_maker');
+session_start();
+error_reporting(0);
+if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
+} else
+  header("location:../login.php");
+
+include('../Processor/Processor.php');
+$data = $user->getData();
+// echo "<pre>" . var_export($data, true) . "</pre>";
+
+if (empty($data['basic_info'][0]))
+  header("location:../info.php");
+
+?>
 <!DOCTYPE html>
 <html lang="en-US">
 
@@ -28,20 +44,20 @@
 
 <body id="top">
   <div class="page-content py-5">
-    <div class="container">
+    <div class="container html-content" id="resume">
       <div class="cover shadow-lg bg-white">
         <div class="cover-bg p-3 p-lg-4 text-white">
           <div class="row">
             <div class="col-lg-4 col-md-5">
               <div class="avatar hover-effect bg-white shadow-sm p-1">
-                <img src="images/avatar.jpg" width="200" height="200" />
+                <img src="../assets/images/profile<?php echo $data['users'][0]->image ?>" width="200" height="200" />
               </div>
             </div>
             <div class="col-lg-8 col-md-7 text-center text-md-start">
-              <h2 class="h1 mt-2" data-aos="fade-left" data-aos-delay="0">Joyce Harrison</h2>
-              <p data-aos="fade-left" data-aos-delay="100">Graphic Designer & Web Developer</p>
+              <h2 class="h1 mt-2 text-capitalize" data-aos="fade-left" data-aos-delay="0"><?php echo $data['users'][0]->name ?></h2>
+              <p data-aos="fade-left" data-aos-delay="100"><?php echo $data['basic_info'][0]->title ?></p>
               <div class="d-print-none" data-aos="fade-left" ata-aos-delay="200">
-                <a class="btn btn-light text-dark shadow-sm mt-1 me-1" href="right-resume.pdf" target="_blank">Download CV</a>
+                <button class="btn btn-light text-dark shadow-sm mt-1 me-1" id="download_btn" onclick="CreatePDFfromHTML()">Download CV</button>
               </div>
             </div>
           </div>
@@ -53,40 +69,25 @@
             <div class="col-md-6">
               <h2 class="h3 mb-3">About Me</h2>
               <p>
-                Hello! I’m Joyce Harrison. I am passionate about UI/UX design
-                and Web Design. I am a skilled Front-end Developer and master
-                of Graphic Design tools such as Photoshop and Sketch.
+                <?php echo $data['basic_info'][0]->summary ?>
               </p>
             </div>
             <!-- Basic info -->
             <div class="col-md-5 offset-md-1">
               <div class="row mt-2">
                 <div class="col-sm-4">
-                  <div class="pb-1">Age</div>
-                </div>
-                <div class="col-sm-8">
-                  <div class="pb-1 text-secondary">28</div>
-                </div>
-                <div class="col-sm-4">
                   <div class="pb-1">Email</div>
                 </div>
                 <div class="col-sm-8">
-                  <div class="pb-1 text-secondary">Joyce@company.com</div>
+                  <div class="pb-1 text-secondary"> <?php echo $data['users'][0]->email ?></div>
                 </div>
                 <div class="col-sm-4">
                   <div class="pb-1">Phone</div>
                 </div>
                 <div class="col-sm-8">
-                  <div class="pb-1 text-secondary">+0718-111-0011</div>
+                  <div class="pb-1 text-secondary"><?php echo $data['users'][0]->contact ?></div>
                 </div>
-                <div class="col-sm-4">
-                  <div class="pb-1">Address</div>
-                </div>
-                <div class="col-sm-8">
-                  <div class="pb-1 text-secondary">
-                    140, City Center, New York, U.S.A
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -99,17 +100,23 @@
             <div class="col-md-6">
               <h2 class="h3 mb-3">Professional Skills</h2>
               <ul>
-                <li>Reading</li>
-                <li>Writing</li>
-                <li>Listening</li>
+                <?php
+                foreach ($data['skills'] as $value) { ?>
+                  <li><?php echo $value->name ?></li>
+                <?php
+                }
+                ?>
               </ul>
             </div>
             <div class="col-md-6">
               <h2 class="h3 mb-3">Languages</h2>
               <ul>
-                <li>English</li>
-                <li>Urdu</li>
-                <li>Pashto</li>
+                <?php
+                foreach ($data['languages'] as $value) { ?>
+                  <li><?php echo $value->name ?></li>
+                <?php
+                }
+                ?>
               </ul>
             </div>
           </div>
@@ -119,25 +126,28 @@
         <hr class="d-print-none" />
         <div class="work-experience-section px-3 px-lg-4">
           <h2 class="h3 mb-4">Work Experience</h2>
-          <div class="timeline">
-            <div class="timeline-card timeline-card-primary card shadow-sm">
-              <div class="card-body">
-                <div class="h5 mb-1">
-                  Frontend Developer
-                  <span class="text-muted h6">at Creative Agency</span>
-                </div>
-                <div class="text-muted text-small mb-2">
-                  May, 2015 - Present
-                </div>
-                <div>
-                  Leverage agile frameworks to provide a robust synopsis for
-                  high level overviews. Iterative approaches to corporate
-                  strategy foster collaborative thinking to further the
-                  overall value proposition.
+          <?php
+          foreach ($data['experiences'] as $value) { ?>
+            <div class="timeline">
+              <div class="timeline-card timeline-card-primary card shadow-sm">
+                <div class="card-body">
+
+                  <div class="h5 mb-1">
+                    <?php echo $value->job_title ?>
+                    <span class="text-muted h6">at <?php echo $value->company_name ?></span>
+                  </div>
+                  <div class="text-muted text-small mb-2">
+                    <?php echo $value->session ?>
+                  </div>
+                  <div>
+                    <?php echo $value->description ?>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          <?php
+          }
+          ?>
         </div>
 
         <!-- Education -->
@@ -145,25 +155,64 @@
         <div class="page-break"></div>
         <div class="education-section px-3 px-lg-4 pb-4">
           <h2 class="h3 mb-4">Education</h2>
-          <div class="timeline">
-            <div class="timeline-card timeline-card-success card shadow-sm">
-              <div class="card-body">
-                <div class="h5 mb-1">
-                  Masters in Information Technology
+          <?php
+          foreach ($data['educations'] as $value) { ?>
+            <div class="timeline">
+              <div class="timeline-card timeline-card-success card shadow-sm">
+                <div class="card-body">
+                  <div class="h5 mb-1">
+                    <?php echo $value->institue ?>
+                  </div>
+                  <span class="text-muted h6"><?php echo $value->degree ?></span>
+                  <div class="text-muted text-small mt-2"><?php echo $value->session ?></div>
                 </div>
-                <span class="text-muted h6">from International University</span>
-                <div class="text-muted text-small mt-2">2011 - 2013</div>
               </div>
             </div>
-          </div>
+          <?php
+          }
+          ?>
         </div>
+
       </div>
     </div>
   </div>
-
   <script src="scripts/bootstrap.bundle.min.js?ver=1.2.0"></script>
   <script src="scripts/aos.js?ver=1.2.0"></script>
   <script src="scripts/main.js?ver=1.2.0"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="/scripts/pdf/src/tableHTMLExport.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+  <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
+
+  <script>
+    function CreatePDFfromHTML() {
+      $('#download_btn').hide()
+      var HTML_Width = $(".html-content").width();
+      var HTML_Height = $(".html-content").height();
+      var top_left_margin = 15;
+      var PDF_Width = HTML_Width + (top_left_margin * 2);
+      var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+      var canvas_image_width = HTML_Width;
+      var canvas_image_height = HTML_Height;
+
+      var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+      html2canvas($(".html-content")[0]).then(function(canvas) {
+        var imgData = canvas.toDataURL("image/jpeg", 1.0);
+        var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+        pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+        for (var i = 1; i <= totalPDFPages; i++) {
+          pdf.addPage(PDF_Width, PDF_Height);
+          pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
+        }
+        pdf.save("Your_PDF_Name.pdf");
+        // $(".html-content").hide();
+        $('#download_btn').show()
+
+      });
+    }
+  </script>
 </body>
 
 </html>
