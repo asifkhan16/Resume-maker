@@ -7,9 +7,11 @@ if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
 } else
     header("location:login.php");
 include('Processor/Processor.php');
-if(isset($_POST['submit'])){
-    $user->storeData();
-  }
+if (isset($_POST['submit'])) {
+    $response = $user->storeData();
+    echo "<pre>". var_export($response,true)."</pre>";
+
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -45,11 +47,11 @@ if(isset($_POST['submit'])){
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     </ul>
                     <a href="dashboard.php" class="btn  btn-primary me-4">back</a>
-                    <?php if(!isset($_SESSION['id'])){ ?>
-            <a href="login.php" class="btn  login-btn">Login</a>
-            <?php } else{ ?>
-              <a href="logout.php" class="btn  login-btn">Logout</a>
-          <?php }?>
+                    <?php if (!isset($_SESSION['id'])) { ?>
+                        <a href="login.php" class="btn  login-btn">Login</a>
+                    <?php } else { ?>
+                        <a href="logout.php" class="btn  login-btn">Logout</a>
+                    <?php } ?>
                 </div>
             </div>
         </nav>
@@ -64,39 +66,14 @@ if(isset($_POST['submit'])){
                 <div class="row px-4 pb-3">
                     <div class="col-md-6 mb-4 px-lg-5">
                         <div class="form-group">
-                            <label class="mb-1" for="">Name</label>
-                            <input type="text" class="form-control" name="name" placeholder="Enter your name">
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-4 px-lg-5">
-                        <div class="form-group">
-                            <label class="mb-1" for="">Email</label>
-                            <input type="email" class="form-control" name="email" placeholder="Enter your email">
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-4 px-lg-5">
-                        <div class="form-group">
-                            <label class="mb-1" for="">Contact</label>
-                            <input type="text" class="form-control" name="contact" placeholder="Enter your Contact">
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-4 px-lg-5">
-                        <div class="form-group">
-                            <label class="mb-1" for="">Address</label>
-                            <input type="text" class="form-control" name="address" placeholder="Enter your address">
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 mb-4 px-lg-5">
-                        <div class="form-group">
                             <label class="mb-1" for="">Job Title</label>
                             <input type="text" class="form-control" name="job_title" placeholder="eg Web Developer">
                         </div>
                     </div>
                     <div class="col-md-6 mb-4 px-lg-5">
                         <div class="form-group">
-                            <label class="mb-1" for="">Job Description</label>
-                            <input type="text" class="form-control" name="job_discription" placeholder="discription">
+                            <label class="mb-1" for="">Summary</label>
+                            <textarea name="summary" id="" class="form-control" placeholder="Summary" rows="2"></textarea>
                         </div>
                     </div>
                     <!-- Skills and Languages  -->
@@ -120,7 +97,7 @@ if(isset($_POST['submit'])){
                                 <span id="add_language" class="btn btn-sm btn-success"> Add Language</span>
                             </div>
                             <div id="language_wrapper">
-                                <input type="text" class="form-control w-75 mb-3" name="language[]" placeholder="eg English">
+                                <input type="text" class="form-control w-75 mb-3" name="languages[]" placeholder="eg English">
                             </div>
                         </div>
                     </div>
@@ -134,19 +111,19 @@ if(isset($_POST['submit'])){
                         <div class="col-md-6 mb-4 px-lg-5">
                             <div class="form-group">
                                 <label class="mb-1" for="">Title</label>
-                                <input type="text" class="form-control" name="exp_title[]" placeholder="title">
+                                <input type="text" class="form-control" name="job_title[]" placeholder="title">
                             </div>
                         </div>
                         <div class="col-md-6 mb-4 px-lg-5">
                             <div class="form-group">
                                 <label class="mb-1" for="">Company name</label>
-                                <input type="text" class="form-control" name="exp_company_name[]" placeholder="Company name">
+                                <input type="text" class="form-control" name="company_name[]" placeholder="Company name">
                             </div>
                         </div>
                         <div class="col-md-6 mb-4 px-lg-5">
                             <div class="form-group">
                                 <label class="mb-1" for="">Session</label>
-                                <input type="date" class="form-control" name="exp_session[]" placeholder="2018 - 2022">
+                                <input type="text" class="form-control" name="exp_session[]" placeholder="2018 - 2022">
                             </div>
                         </div>
                         <div class="col-md-6 mb-4 px-lg-5">
@@ -183,7 +160,6 @@ if(isset($_POST['submit'])){
                         </div>
                         <div class="col-md-6 mb-4 px-lg-5">
                         </div>
-                      
                     </div>
                 </div>
                 <input type="submit" name="submit" class="btn btn-primary d-block w-100 mb-5" value="Save Information">
@@ -204,22 +180,22 @@ if(isset($_POST['submit'])){
 
             $(this).on('click', '#add_language', function() {
                 $('#language_wrapper').append('\
-                <input type="text" class="form-control w-75 mb-3" name="language[]" placeholder="eg English">\
+                <input type="text" class="form-control w-75 mb-3" name="languages[]" placeholder="eg English">\
                 ')
             })
 
             $(this).on('click', '#add_experience', function() {
-               $('#experience_wrapper').append('\
+                $('#experience_wrapper').append('\
                          <div class="col-md-6 mb-4 px-lg-5">\
                             <div class="form-group">\
                                 <label class="mb-1" for="">Title</label>\
-                                <input type="text" class="form-control" name="exp_title[]" placeholder="title">\
+                                <input type="text" class="form-control" name="job_title[]" placeholder="title">\
                             </div>\
                         </div>\
                         <div class="col-md-6 mb-4 px-lg-5">\
                             <div class="form-group">\
                                 <label class="mb-1" for="">Company name</label>\
-                                <input type="text" class="form-control" name="exp_company_name[]" placeholder="Company name">\
+                                <input type="text" class="form-control" name="company_name[]" placeholder="Company name">\
                             </div>\
                         </div>\
                         <div class="col-md-6 mb-4 px-lg-5">\
@@ -262,7 +238,7 @@ if(isset($_POST['submit'])){
                 ')
             })
 
-        })//end of ready
+        }) //end of ready
     </script>
 </body>
 
