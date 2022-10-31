@@ -1,4 +1,7 @@
 <?php
+session_name('resume_maker');
+session_start();
+error_reporting(0);
 include('processor/processor.php');
 ?>
 <!doctype html>
@@ -17,18 +20,17 @@ include('processor/processor.php');
   <div class="navbar-wrapper">
     <nav class="navbar px-5 py-4 navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Resume Maker</a>
+        <a class="navbar-brand" href="index.php">Resume Maker</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-
           </ul>
           <?php if(!isset($_SESSION['id'])){ ?>
             <a href="login.php" class="btn  login-btn">Login</a>
             <?php } else{ ?>
+              <a href="dashboard.php" class="btn btn-primary me-4" >Dashboard</a>
               <a href="logout.php" class="btn  login-btn">Logout</a>
           <?php }?>
         </div>
@@ -44,7 +46,7 @@ include('processor/processor.php');
         <div class="ps-5">
           <h1 class="mb-3">The Best Online <br> Resume Maker...</h1>
           <p class="mb-5">If a sheet of paper represents your entire work life,<br> personality, and skills, it better be a pretty amazing piece of paper.</p>
-          <a class="header-btn" href="#">Create your Resume Now</a>
+          <a class="header-btn" href="template1/index.php">Create your Resume Now</a>
         </div>
       </div>
       <div class="col-md-6">
