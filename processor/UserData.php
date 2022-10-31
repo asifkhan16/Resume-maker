@@ -28,9 +28,9 @@
         function storeData(){
 
             try {
-                // return "<pre>". var_export($user_id,true)."</pre>";
                 // USER ID
                 $user_id = $_SESSION['id'];
+                return "<pre>". var_export($user_id,true)."</pre>";
 
                 // BASIC INFO
                 $summary = $_POST['summary'];
