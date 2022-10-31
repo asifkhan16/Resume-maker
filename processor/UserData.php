@@ -45,6 +45,7 @@ class UserData
             $degree = $_POST['degree'];
             $edu_session = $_POST['edu_session'];
 
+
             // SKILLS
             $skills = $_POST['skills'];
 
